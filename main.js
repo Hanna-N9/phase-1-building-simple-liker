@@ -2,34 +2,40 @@
 const EMPTY_HEART = "♡";
 const FULL_HEART = "♥";
 
+const glypearts = document.querySelectorAll("span.like-glyph");
+
 // Your JavaScript code goes here!
 function like(e) {
   const heart = e.target;
-  mimicServerCall("url") //Invoke mimicServerCall to simulate making a server request
+  mimicServerCall("bogusUrl") //Invoke mimicServerCall to simulate making a server request
     //When the "server" returns a success status:
     .then(() => {
       //When the "server" returns a success status: Change the heart to a full heart, Add the .activated-heart class to make the heart appear red
       if (heart.innerText === EMPTY_HEART) {
-        heart.innerText = FULL_HEART;
+        heart.textContent = FULL_HEART;
         heart.className = "activated-heart";
         //When a user clicks on a full heart:
       } else {
-        heart.textContent = FULL_HEART;
+        heart.textContent = EMPTY_HEART;
         //Remove the .activated-heart class
-        addElementActivated.classList.remove("activated-heart");
+        heart.classList.remove("activated-heart");
       }
     })
     //Respond to the error
-    .catch(() => {
+    .catch(err => {
       //Display the error modal by removing the .hidden class
-      const removeHiddenModal = document.querySelector(".hidden");
+      const removeHiddenModal = document.querySelector("modal#modal");
       //classList represents "contents of the element's class attribute" element.classList.remove(className);
-      removeHiddenModal.classList.remove("hidden");
+      removeHiddenModal.classList.remove("modal");
       //Display the server error message in the modal
-      removeHiddenModal.textContent = "server error message";
+      removeHiddenModal.textContent = err;
       //Use setTimeout to hide the modal after 3 seconds (add the .hidden class)
       setTimeout(() => (removeHiddenModal.className = "hidden"), 3000); // or setTimeout(() => removeHiddenModal.classList.add = "hidden", 3000)
     });
+}
+
+for (const glyph of glypearts) {
+  glyph.addEventListener("click", like);
 }
 
 //------------------------------------------------------------------------------
